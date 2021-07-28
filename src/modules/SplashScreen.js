@@ -11,29 +11,25 @@ export default function SplashScreen({navigation}) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setTimeout( () => {
+    setTimeout( async() => {
       setLoading(true)
  
-    Check()
+      await auth().onAuthStateChanged(user => {
+        if (user) {
+          console.log('Check User in App.js', user);
+          dispatch(doCheckUser(user));
+          setLoading(false);
+          navigation.replace('Todo');
+        } 
+        else {
+          setLoading(false)
+          navigation.replace('LoginScreen');
+          console.log('Check User in App.js in else');
+        }
+      });
     }, 2000);
     
   }, [])
-  async function Check() {
-    await auth().onAuthStateChanged(user => {
-      if (user) {
-        console.log('Check User in App.js', user);
-        dispatch(doCheckUser(user));
-        setLoading(false);
-        navigation.replace('Todo');
-      } 
-      else {
-        setLoading(false)
-        navigation.replace('LoginScreen');
-        console.log('Check User in App.js in else');
-      }
-    });
-    
-  }
 
  
 
