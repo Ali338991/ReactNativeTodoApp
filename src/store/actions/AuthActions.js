@@ -5,17 +5,18 @@ export const LOGIN = "Login";
 export const LOGOUT = "LOGOUT";
 
 
-export const doLogin = (Email,Password) => async (dispatch) => {
+export const doLogin = (Email,Password,setLoading) => async (dispatch) => {
   try {
     // firebase login
     const user = await Auth.signInWithEmailAndPassword(Email,Password);
-    console.log("user", user.uid);
+    console.log("user", user.user.uid);
     dispatch({
       type: LOGIN,
-      payload: user,
+      payload: user.user,
     });
   } catch (error) {
       alert(error)
+      setLoading(false)
     console.log("error", error);
   }
 };

@@ -24,7 +24,7 @@ export default function LoginScreen({navigation}) {
 
   const Login = () => {
     setLoading(true);
-    dispatch(doLogin(Email, Password));
+    dispatch(doLogin(Email, Password,setLoading));
     if (userState) {
       setLoading(false);
 
