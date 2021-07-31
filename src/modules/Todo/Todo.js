@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import {Agenda} from 'react-native-calendars';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Calender from './commonComponent/Calender';
 import {
   View,
   ScrollView,
@@ -17,8 +18,6 @@ import {
 import useTodo from './useTodo';
 import styles from './TodoStyle';
 
-import { doLogout } from '../../store/actions/AuthActions';
-
 
 export default function ToDo({navigation}) {
   var today = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
@@ -28,18 +27,15 @@ export default function ToDo({navigation}) {
 
   const todoData = useSelector(state => state.TodoReducer.todo);
   const todoSize = useSelector(state => state.TodoReducer.size);
+  const uid = useSelector(state => state.AuthReducer.user?.uid);
+
   console.log('Check', todoData);
 
   useEffect(() => {
-    dispatch(loadTodo(today));
-    // console.log("useEffectCalled")
+    dispatch(loadTodo(today, uid));
   }, []);
-  
+  console.log('uid in todo.js', uid);
 
-  const filterData = date => {
-    console.log('check Filter', date);
-    dispatch(filterTodo(date));
-  };
   const [
     Todo,
     Task,
@@ -55,13 +51,8 @@ export default function ToDo({navigation}) {
     ctaUpdateHandler,
     UpdateItem,
   ] = useTodo();
- 
-  const signOut = () =>{
-   dispatch(doLogout())
-    navigation.replace("LoginScreen")
 
 
-  }
 
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
@@ -82,14 +73,15 @@ export default function ToDo({navigation}) {
           </Text>
         </View>
         <View style={{position: 'absolute', right: 10, flexDirection: 'row'}}>
-          <Feather name="bell" size={30} />
-          <Icon name="md-menu" size={30} />
+          <Feather name="bell" style={{paddingRight:10}} size={40} />
+          <Icon name="md-menu" size={40} onPress={()=>navigation.openDrawer()}/>
         </View>
       </View>
       {/*.............................. Slider Area..................................... */}
 
       <View style={styles.Slider}>
-        <Agenda onDayPress={day => filterData(day.dateString)} />
+        {/* <Agenda onDayPress={day => filterData(day.dateString)} /> */}
+        <Calender />
       </View>
 
       {/*.............................. Input Area..................................... */}
@@ -122,7 +114,7 @@ export default function ToDo({navigation}) {
                   outerSize={25}
                   isChecked={item.check}
                   component={
-                    item.check ? <Entypo name="check" size={20}  /> : <></>
+                    item.check ? <Entypo name="check" size={20} /> : <></>
                   }
                   checkedColor="#ff6633"
                   // uncheckedColor=
@@ -130,7 +122,7 @@ export default function ToDo({navigation}) {
                 />
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('Calender', {
+                    navigation.navigate('DetailScreen', {
                       item: item,
                     })
                   }>
@@ -215,7 +207,7 @@ export default function ToDo({navigation}) {
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                    onPress={() => ctaHandler(today)}
+                    onPress={() => ctaHandler(today, uid)}
                     style={styles.BtnAdd}>
                     <Text style={{color: 'white', fontSize: 15}}>Add</Text>
                   </TouchableOpacity>
@@ -230,7 +222,7 @@ export default function ToDo({navigation}) {
       {/* End Add Task Modal */}
 
       <View style={{justifyContent: 'flex-end', flex: 1}}>
-      <TouchableOpacity
+        <TouchableOpacity
           onPress={() => setModalVisible(true)}
           style={styles.BtnModel}>
           <Text style={styles.BtnText}>
@@ -239,14 +231,6 @@ export default function ToDo({navigation}) {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={signOut}
-          style={styles.BtnModel}>
-          <Text style={styles.BtnText}>
-            Logout
-          </Text>
-        </TouchableOpacity>
-        
       </View>
     </View>
   );

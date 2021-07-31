@@ -4,7 +4,7 @@ import { CHECK_USER } from "./TodoType";
 // we will use this isUserLoggedIn in navigation for checking weather user login or not
 const initialState = {
   isUserLoggedIn : false,
-  user: null,
+  user: [],
  }
  
  
@@ -36,6 +36,7 @@ const initialState = {
                          ...state,
                         isUserLoggedIn:  true,
                         user: action.payload
+                        
                      };
                  }
              

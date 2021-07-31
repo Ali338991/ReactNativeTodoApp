@@ -7,12 +7,13 @@ import {
 } from '../reducers/TodoType';
 import {db} from '../../config/Firebase';
 
-export const loadTodo =  Date => async dispatch =>{
+export const loadTodo =  (Date,uid) => async dispatch =>{
   try {
     console.log('try');
     const todo = await db
       .collection('sample')
       .where('date', '==', Date)
+      .where('uid', '==', uid)
       .get()   
         const todoData = [];
         todo.forEach(documentSnapshot => {
@@ -32,17 +33,18 @@ export const loadTodo =  Date => async dispatch =>{
         });
       
   } catch (error) {
-    alert(JSON.stringify(error));
+    alert(error);
     console.log('error', error);
   }
 };
 //Filter Data
-export const filterTodo =  Date => async dispatch =>{
+export const filterTodo =  (Date,uid) => async dispatch =>{
   try {
     console.log('try');
     const data = await db
       .collection('sample')
       .where('date', '==', Date)
+         .where('uid', '==', uid)
       .get()
       .then(querySnapshot => {
         console.log('Total users: ', querySnapshot.size);
@@ -53,7 +55,7 @@ export const filterTodo =  Date => async dispatch =>{
             id: documentSnapshot.id,
             size: querySnapshot.size,
           });
-          // console.log("CheckCall",{...documentSnapshot.data(), id: documentSnapshot.id})
+        
         });
 
         console.log('CheckFinal', todoData);
@@ -64,17 +66,18 @@ export const filterTodo =  Date => async dispatch =>{
         });
       });
   } catch (error) {
-    alert(JSON.stringify(error));
+    alert(error);
     console.log('error', error);
   }
 };
 
-export const addTodo = (Task,today) => async dispatch => {
+export const addTodo = (Task,today,uid) => async dispatch => {
   console.log('action, data from react component', Task);
   const Add = await db.collection('sample').add({
     name: Task,
     check: false,
     date:today,
+    uid:uid,
   });
   // console.log("error", Add);
   dispatch({

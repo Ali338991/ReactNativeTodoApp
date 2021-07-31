@@ -7,9 +7,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import useTodo from './useTodo';
 
 
-import {Agenda, calendarTheme} from 'react-native-calendars';
 
-export default function Calender({route, navigation}) {
+export default function DetailScreen({route, navigation}) {
   const {item, otherParam} = route.params;
   const [
     Todo,
