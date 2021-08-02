@@ -10,29 +10,32 @@ import {db} from '../../config/Firebase';
 export const loadTodo =  (Date,uid) => async dispatch =>{
   try {
     console.log('try');
-    const todo = await db
+
+     await db
       .collection('sample')
       .where('date', '==', Date)
       .where('uid', '==', uid)
-      .get()   
-        const todoData = [];
-        todo.forEach(documentSnapshot => {
+      .onSnapshot((querySnapshot)=> {
+        const todoData = [];       
+        querySnapshot.forEach(doc => {
           todoData.push({
-            ...documentSnapshot.data(),
-            id: documentSnapshot.id,
-            size: todo.size,
-          });
-          // console.log("CheckCall",{...documentSnapshot.data(), id: documentSnapshot.id})
-        });
+            ...doc.data(),
+            id: doc.id,   
+          }); 
+      })   
 
-        console.log('CheckFinal', todoData);
+      console.log('CheckFinal', todoData)
+      dispatch({
+        type: LOAD_TODO,
+        payload: todoData,
+      });
 
-        dispatch({
-          type: LOAD_TODO,
-          payload: todoData,
-        });
+    })
+
+       
       
-  } catch (error) {
+  } 
+  catch (error) {
     alert(error);
     console.log('error', error);
   }

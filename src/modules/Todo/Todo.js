@@ -26,7 +26,6 @@ export default function ToDo({navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const todoData = useSelector(state => state.TodoReducer.todo);
-  const todoSize = useSelector(state => state.TodoReducer.size);
   const uid = useSelector(state => state.AuthReducer.user?.uid);
 
   console.log('Check', todoData);
@@ -95,7 +94,7 @@ export default function ToDo({navigation}) {
             fontWeight: 'bold',
             marginHorizontal: 10,
           }}>
-          {todoSize} Tasks Today
+          {todoData?.length} Tasks Today
         </Text>
 
         <ScrollView style={{height: 300}}>
