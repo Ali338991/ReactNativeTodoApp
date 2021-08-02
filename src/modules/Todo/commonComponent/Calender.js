@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
-import { filterTodo } from '../../../store/actions/TodoAction';
+import { loadTodo } from '../../../store/actions/TodoAction';
 import {useSelector, useDispatch} from 'react-redux';
 
 
@@ -11,7 +11,7 @@ export default function Calender() {
   const dispatch = useDispatch()
   const filterData = (date,uid) => {
     console.log('check Filter', date);
-    dispatch(filterTodo(date,uid));
+    dispatch(loadTodo(date,uid));
   };
 
   return (

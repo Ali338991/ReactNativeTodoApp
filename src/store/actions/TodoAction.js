@@ -41,38 +41,7 @@ export const loadTodo =  (Date,uid) => async dispatch =>{
   }
 };
 //Filter Data
-export const filterTodo =  (Date,uid) => async dispatch =>{
-  try {
-    console.log('try');
-    const data = await db
-      .collection('sample')
-      .where('date', '==', Date)
-         .where('uid', '==', uid)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total users: ', querySnapshot.size);
-        const todoData = [];
-        querySnapshot.forEach(documentSnapshot => {
-          todoData.push({
-            ...documentSnapshot.data(),
-            id: documentSnapshot.id,
-            size: querySnapshot.size,
-          });
-        
-        });
 
-        console.log('CheckFinal', todoData);
-
-        dispatch({
-          type: LOAD_TODO,
-          payload: todoData,
-        });
-      });
-  } catch (error) {
-    alert(error);
-    console.log('error', error);
-  }
-};
 
 export const addTodo = (Task,today,uid) => async dispatch => {
   console.log('action, data from react component', Task);
