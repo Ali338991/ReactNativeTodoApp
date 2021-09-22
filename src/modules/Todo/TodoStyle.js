@@ -2,7 +2,8 @@ import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   Slider: {
-    flex: 1,
+  
+   
   },
 
   BtnModel: {

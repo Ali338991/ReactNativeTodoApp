@@ -7,19 +7,21 @@ import LoginScreen from '../modules/LoginScreen';
 import InfoScreen from '../modules/InfoScreen';
 import LoginWhite from '../modules/LoginWhite';
 import TabNavigation from '../modules/TabNavigation';
+import SideMenu from '../modules/Todo/sideMenu/SideMenu'
 import {createDrawerNavigator} from '@react-navigation/drawer';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import ToDo from '../modules/Todo/Todo';
-import Calender from '../modules/Todo/Calender';
+import DetailScreen from '../modules/Todo/DetailScreen';
 import SignupScreen from '../modules/SignupScreen';
 import {useSelector} from 'react-redux';
 export default function App() {
   const userState = useSelector(state => state.AuthReducer.isUserLoggedIn);
-
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
   const Drawer = createDrawerNavigator();
-  function asd() {
+
+  
+  // function asd() {
     //   return (
     //     <Tab.Navigator
     //     screenOptions={({ route }) => ({
@@ -47,28 +49,34 @@ export default function App() {
     //     </Tab.Navigator>
     //   );
     // }
-    //   function asd() {
-    //   return (
-    //        <Drawer.Navigator initialRouteName="Home">
-    //         <Drawer.Screen name="LoginScreen" component={LoginScreen} />
-    //         <Drawer.Screen name="InfoScreen" component={InfoScreen} />
-    //       </Drawer.Navigator>
-    //   );
-  }
+   
+  // }
+  function drawer() {
+    
+      return (
+           <Drawer.Navigator
+           drawerContent={ props => <SideMenu {...props} /> }>  
+            <Drawer.Screen name="LoginScreen" component={ToDo} />
+            <Drawer.Screen name="InfoScreen" component={InfoScreen} />
+          </Drawer.Navigator>
+      );
 
+    
+  }
+  
+  
   return (
     <NavigationContainer>
+      
+
+
       <Stack.Navigator headerMode="false">
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
-
         <Stack.Screen name="SignupScreen" component={SignupScreen} />
-        <Stack.Screen name="InfoScreen" component={InfoScreen} />
-        <Stack.Screen name="Todo" component={ToDo} />
-        <Stack.Screen name="Calender" component={Calender} />
-        <Stack.Screen name="LoginWhite" component={LoginWhite} />
-        <Stack.Screen name="TabNavigation" component={asd} />
-
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="Todo" component={drawer} />
+        <Stack.Screen name="DetailScreen" component={DetailScreen} />
+        <Stack.Screen name="LoginWhite" component={LoginWhite} />
       </Stack.Navigator>
     </NavigationContainer>
   );

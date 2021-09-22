@@ -13,6 +13,8 @@ export default function useTodo() {
   const todoData = useSelector(state => state.TodoReducer.todo);
   console.log('Check', todoData);
 
+
+
   const [Todo, setTodo] = useState();
   const [Task, setTask] = useState();
   const [description, setDescription] = useState();
@@ -29,10 +31,10 @@ export default function useTodo() {
     }
   };
 
-  const ctaHandler = today => {
-    console.log('ctaHaCalled');
+  const ctaHandler = (today,uid) => {
+    console.log('ctaHaCalled',uid);
     if (Task != '') {
-      dispatch(addTodo(Task, today));
+      dispatch(addTodo(Task, today,uid));
       setTask('');
       setDescription('');
     }
@@ -60,6 +62,7 @@ export default function useTodo() {
     Todo,
     Task,
     Flag,
+    
     description,
     setDescription,
     setTodo,

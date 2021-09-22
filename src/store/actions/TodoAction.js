@@ -7,74 +7,49 @@ import {
 } from '../reducers/TodoType';
 import {db} from '../../config/Firebase';
 
-export const loadTodo =  Date => async dispatch =>{
+export const loadTodo =  (Date,uid) => async dispatch =>{
   try {
     console.log('try');
-    const todo = await db
+
+     await db
       .collection('sample')
       .where('date', '==', Date)
-      .get()   
-        const todoData = [];
-        todo.forEach(documentSnapshot => {
+      .where('uid', '==', uid)
+      .onSnapshot((querySnapshot)=> {
+        const todoData = [];       
+        querySnapshot.forEach(doc => {
           todoData.push({
-            ...documentSnapshot.data(),
-            id: documentSnapshot.id,
-            size: todo.size,
-          });
-          // console.log("CheckCall",{...documentSnapshot.data(), id: documentSnapshot.id})
-        });
+            ...doc.data(),
+            id: doc.id,   
+          }); 
+      })   
 
-        console.log('CheckFinal', todoData);
+      console.log('CheckFinal', todoData)
+      dispatch({
+        type: LOAD_TODO,
+        payload: todoData,
+      });
 
-        dispatch({
-          type: LOAD_TODO,
-          payload: todoData,
-        });
+    })
+
+       
       
-  } catch (error) {
-    alert(JSON.stringify(error));
+  } 
+  catch (error) {
+    alert(error);
     console.log('error', error);
   }
 };
 //Filter Data
-export const filterTodo =  Date => async dispatch =>{
-  try {
-    console.log('try');
-    const data = await db
-      .collection('sample')
-      .where('date', '==', Date)
-      .get()
-      .then(querySnapshot => {
-        console.log('Total users: ', querySnapshot.size);
-        const todoData = [];
-        querySnapshot.forEach(documentSnapshot => {
-          todoData.push({
-            ...documentSnapshot.data(),
-            id: documentSnapshot.id,
-            size: querySnapshot.size,
-          });
-          // console.log("CheckCall",{...documentSnapshot.data(), id: documentSnapshot.id})
-        });
 
-        console.log('CheckFinal', todoData);
 
-        dispatch({
-          type: LOAD_TODO,
-          payload: todoData,
-        });
-      });
-  } catch (error) {
-    alert(JSON.stringify(error));
-    console.log('error', error);
-  }
-};
-
-export const addTodo = (Task,today) => async dispatch => {
+export const addTodo = (Task,today,uid) => async dispatch => {
   console.log('action, data from react component', Task);
   const Add = await db.collection('sample').add({
     name: Task,
     check: false,
     date:today,
+    uid:uid,
   });
   // console.log("error", Add);
   dispatch({
